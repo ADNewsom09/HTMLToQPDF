@@ -10,13 +10,13 @@ namespace HTMLToQPDF.Utils
             "Arial",
             "Brush Script MT",
             "Courier New",
-            "Monteserrat",
+            "Montserrat",
             "Helvetica",
             "Tahoma",
             "Trebuchet MS",
             "Times New Roman",
             "Verdana",
-            "Geordia"
+            "Georgia"
         };
 
         public static string formatFontFamily(string fontFamily)
