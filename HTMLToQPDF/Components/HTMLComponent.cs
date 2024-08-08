@@ -3,6 +3,7 @@ using HTMLQuestPDF;
 using HTMLQuestPDF.Extensions;
 using HTMLQuestPDF.Utils;
 using HTMLToQPDF.Utils;
+using QuestPDF.Drawing;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 
@@ -52,6 +53,14 @@ namespace HTMLToQPDF.Components
 
         public void Compose(IContainer container)
         {
+            var fontPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets\\Fonts");
+            foreach (var fontFile in Directory.GetFiles(fontPath))
+            {
+                using (var stream = File.OpenRead(fontFile))
+                {
+                    FontManager.RegisterFont(stream);
+                }
+            }
             var doc = new HtmlDocument();
             doc.LoadHtml(HTMLUtils.PrepareHTML(HTML));
             var node = doc.DocumentNode;

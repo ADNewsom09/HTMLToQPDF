@@ -152,7 +152,10 @@ namespace HTMLQuestPDF.Components
                             break;
                         case "font-family":
                             string font = FontFamilyUtils.formatFontFamily(styleValue);
-                            textStyle = textStyle.FontFamily(font); 
+                            if (FontFamilyUtils.isFontFamilyValid(font))
+                            {
+                                textStyle = textStyle.FontFamily(font);
+                            }
                             break;
                         case "color":
                             hexColor = ColorUtils.ColorToHex(styleValue);
