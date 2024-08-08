@@ -6,6 +6,7 @@ using HTMLToQPDF.Utils;
 using QuestPDF.Drawing;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
+using System.Reflection;
 
 namespace HTMLToQPDF.Components
 {
@@ -53,14 +54,26 @@ namespace HTMLToQPDF.Components
 
         public void Compose(IContainer container)
         {
-            var fontPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets" + Path.DirectorySeparatorChar + "Fonts");
-            foreach (var fontFile in Directory.GetFiles(fontPath))
+            try
             {
-                using (var stream = File.OpenRead(fontFile))
+                var assembly = Assembly.GetExecutingAssembly();
+                var resourceNames = assembly.GetManifestResourceNames();
+
+                var fontResources = resourceNames.Where(r => r.StartsWith("HTMLToQPDF.Assets.Fonts") && r.EndsWith(".ttf"));;
+
+                foreach (var fontFile in fontResources)
                 {
-                    FontManager.RegisterFont(stream);
+                    using (var stream = assembly.GetManifestResourceStream(fontFile))
+                    {
+                        if (stream != null)
+                        {
+                            FontManager.RegisterFont(stream);
+                        }
+                    }
                 }
             }
+            catch { }
+            
             var doc = new HtmlDocument();
             doc.LoadHtml(HTMLUtils.PrepareHTML(HTML));
             var node = doc.DocumentNode;

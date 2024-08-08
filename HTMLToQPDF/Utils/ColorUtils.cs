@@ -27,7 +27,7 @@ namespace HTMLToQPDF.Utils
                     hexColor = CheckHexFormat(hex) ? hex : string.Empty;
                 }
             }
-            catch (Exception e)
+            catch
             {
                 hexColor = string.Empty;
             }
