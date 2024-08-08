@@ -53,7 +53,7 @@ namespace HTMLToQPDF.Components
 
         public void Compose(IContainer container)
         {
-            var fontPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets\\Fonts");
+            var fontPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets" + Path.DirectorySeparatorChar + "Fonts");
             foreach (var fontFile in Directory.GetFiles(fontPath))
             {
                 using (var stream = File.OpenRead(fontFile))

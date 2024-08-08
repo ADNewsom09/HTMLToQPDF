@@ -5,7 +5,7 @@ namespace HTMLToQPDF.Utils
 {
     internal static class FontFamilyUtils
     {
-        private static HashSet<string> availableFonts = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        private static readonly HashSet<string> availableFonts = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "Arial",
             "Brush Script MT",
