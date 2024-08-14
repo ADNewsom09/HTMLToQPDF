@@ -141,8 +141,10 @@ namespace HTMLQuestPDF.Components
             {
                 if (s.Split(':') is { Length: 2 } split)
                 {
+                    var styleType = split[0].Trim();
                     var styleValue = split[1].Trim();
-                    switch (split[0].Trim())
+
+                    switch (styleType)
                     {
                         case "background-color":
                             string hexColor = ColorUtils.ColorToHex(styleValue);
@@ -194,10 +196,10 @@ namespace HTMLQuestPDF.Components
                     {
                         if (s.Split(':') is { Length: 2 } split)
                         {
-                            var styleValue = split[1].Trim();
-                            if (split[0].Trim() == "text-align")
+                            var styleType = split[0].Trim();
+                            if (styleType == "text-align")
                             {
-                                return styleValue;
+                                return split[1].Trim();
                             }
                         }
                     }
