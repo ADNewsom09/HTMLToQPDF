@@ -54,18 +54,18 @@ namespace HTMLQuestPDF.Components
             last.InnerHtml = last.InnerHtml.TrimEnd();
 
             var alignment = GetAlignmentAttribute(listItemNode);
-            container.Align(alignment).Text(GetAction(lineNodes));
+            container.Align(alignment).Text(GetAction(lineNodes, alignment));
         }
 
-        private Action<TextDescriptor> GetAction(List<HtmlNode> nodes)
+        private Action<TextDescriptor> GetAction(List<HtmlNode> nodes, string alignment)
         {
             return text =>
             {
-                lineNodes.ForEach(node => GetAction(node).Invoke(text));
+                lineNodes.ForEach(node => GetAction(node, alignment).Invoke(text));
             };
         }
 
-        private Action<TextDescriptor> GetAction(HtmlNode node)
+        private Action<TextDescriptor> GetAction(HtmlNode node, string alignment)
         {
             return text =>
             {
@@ -73,6 +73,10 @@ namespace HTMLQuestPDF.Components
                 {
                     var span = text.Span(node.InnerText);
                     GetTextSpanAction(node).Invoke(span);
+                    if (alignment == "ql-align-justify" || alignment == "justify")
+                    {
+                        text.Justify();
+                    }
                 }
                 else if (node.IsBr())
                 {
@@ -83,7 +87,7 @@ namespace HTMLQuestPDF.Components
                 {
                     foreach (var item in node.ChildNodes)
                     {
-                        var action = GetAction(item);
+                        var action = GetAction(item, alignment);
                         action(text);
                     }
                 }
@@ -133,11 +137,9 @@ namespace HTMLQuestPDF.Components
 
         private TextStyle ParseStyleString(string styleString, TextStyle textStyle)
         {
-            List<string> styles = new List<string>(styleString.Split(';'));
-            foreach (var s in styles)
+            foreach (var s in styleString.Split(';'))
             {
-                var split = s.Split(':');
-                if (split.Length == 2)
+                if (s.Split(':') is { Length: 2 } split)
                 {
                     var styleType = split[0].Trim();
                     var styleValue = split[1].Trim();
@@ -162,7 +164,7 @@ namespace HTMLQuestPDF.Components
                             hexColor = ColorUtils.ColorToHex(styleValue);
                             if (hexColor != string.Empty)
                             {
-                                textStyle = textStyle.FontColor(hexColor);
+                                textStyle = textStyle.FontColor(hexColor);        
                             }
                             break;
                         default:
@@ -180,8 +182,7 @@ namespace HTMLQuestPDF.Components
                 var value = attr.Value;
                 if (attr.Name == "class")
                 {
-                    List<string> classes = new List<string>(value.Split(' '));
-                    foreach (string className in classes)
+                    foreach (string className in value.Split(' '))
                     {
                         if (className == "ql-align-right" || className == "ql-align-center" || className == "ql-align-justify")
                         {
@@ -191,11 +192,9 @@ namespace HTMLQuestPDF.Components
                 }
                 else if (attr.Name == "style")
                 {
-                    List<string> styles = new List<string>(value.Split(';'));
-                    foreach (var s in styles)
+                    foreach (var s in value.Split(';'))
                     {
-                        var split = s.Split(':');
-                        if (split.Length == 2)
+                        if (s.Split(':') is { Length: 2 } split)
                         {
                             var styleType = split[0].Trim();
                             var styleValue = split[1].Trim();
