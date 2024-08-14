@@ -141,10 +141,8 @@ namespace HTMLQuestPDF.Components
             {
                 if (s.Split(':') is { Length: 2 } split)
                 {
-                    var styleType = split[0].Trim();
                     var styleValue = split[1].Trim();
-
-                    switch (styleType)
+                    switch (split[0].Trim())
                     {
                         case "background-color":
                             string hexColor = ColorUtils.ColorToHex(styleValue);
@@ -164,7 +162,7 @@ namespace HTMLQuestPDF.Components
                             hexColor = ColorUtils.ColorToHex(styleValue);
                             if (hexColor != string.Empty)
                             {
-                                textStyle = textStyle.FontColor(hexColor);        
+                                textStyle = textStyle.FontColor(hexColor);
                             }
                             break;
                         default:
@@ -196,9 +194,8 @@ namespace HTMLQuestPDF.Components
                     {
                         if (s.Split(':') is { Length: 2 } split)
                         {
-                            var styleType = split[0].Trim();
                             var styleValue = split[1].Trim();
-                            if (styleType == "text-align")
+                            if (split[0].Trim() == "text-align")
                             {
                                 return styleValue;
                             }
