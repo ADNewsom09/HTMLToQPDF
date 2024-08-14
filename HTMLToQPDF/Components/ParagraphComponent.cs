@@ -53,7 +53,8 @@ namespace HTMLQuestPDF.Components
             first.InnerHtml = first.InnerHtml.TrimStart();
             last.InnerHtml = last.InnerHtml.TrimEnd();
 
-            container.Text(GetAction(lineNodes));
+            var alignment = GetAlignmentAttribute(listItemNode);
+            container.Align(alignment).Text(GetAction(lineNodes));
         }
 
         private Action<TextDescriptor> GetAction(List<HtmlNode> nodes)
@@ -170,6 +171,43 @@ namespace HTMLQuestPDF.Components
                 }
             }
             return textStyle;
+        }
+
+        private string GetAlignmentAttribute(HtmlNode element)
+        {
+            foreach (var attr in element.Attributes)
+            {
+                var value = attr.Value;
+                if (attr.Name == "class")
+                {
+                    List<string> classes = new List<string>(value.Split(' '));
+                    foreach (string className in classes)
+                    {
+                        if (className == "ql-align-right" || className == "ql-align-center" || className == "ql-align-justify")
+                        {
+                            return className;
+                        }
+                    }
+                }
+                else if (attr.Name == "style")
+                {
+                    List<string> styles = new List<string>(value.Split(';'));
+                    foreach (var s in styles)
+                    {
+                        var split = s.Split(':');
+                        if (split.Length == 2)
+                        {
+                            var styleType = split[0].Trim();
+                            var styleValue = split[1].Trim();
+                            if (styleType == "text-align")
+                            {
+                                return styleValue;
+                            }
+                        }
+                    }
+                }
+            }
+            return string.Empty;
         }
     }
 }
