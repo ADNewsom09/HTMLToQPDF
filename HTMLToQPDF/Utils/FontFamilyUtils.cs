@@ -10,6 +10,7 @@ namespace HTMLToQPDF.Utils
             "Arial",
             "Brush Script MT",
             "Courier New",
+            "Garamond",
             "Montserrat",
             "Helvetica",
             "Tahoma",
@@ -28,6 +29,7 @@ namespace HTMLToQPDF.Utils
                 font = fontFamily.Substring(0, comma);
             }
             font = font.Replace("'", string.Empty);
+            font = font.Replace("\"", string.Empty);
 
             return font;
         }
